@@ -1,11 +1,27 @@
+import cors from 'cors'
 import express from 'express'
+import mongoose from 'mongoose'
+
+import { config } from './config/config.js'
+import Logging from './lib/logging.js'
+import { userRouter } from './modules/userRouter.js'
 
 const app = express()
+app.use(express.json())
+app.use(cors())
 
-app.get('/', (req, res) => {
-    res.send('Hello World')
-})
+mongoose
+  .connect(config.mongo.url)
+  .then(() => {
+    Logging.info('Connected to MongoDB')
+  })
+  .catch((error) => {
+    Logging.error('Unable to connect to MongoDB')
+    Logging.error(error)
+  })
 
-app.listen(3333, () => {
-    console.log('Server iniciado na porta 3333 com sucesso!')
+app.use('/user', userRouter)
+
+app.listen(config.server.port, () => {
+  Logging.info(`Server listening on port ${config.server.port}`)
 })
