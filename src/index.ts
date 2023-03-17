@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 
 import { config } from './config/config.js'
 import Logging from './lib/logging.js'
-import { userRouter } from './modules/userRouter.js'
+import { userRouter } from './modules/user/userRouter.js'
 
 const app = express()
 app.use(express.json())
